@@ -24,7 +24,7 @@ function StatusBadge({ status }: { status: PostStatus }) {
   )
 }
 
-function HubSection({ hubNumber, posts }: { hubNumber: number; posts: Post[] }) {
+function HubSection({ hubNumber, posts, clientId }: { hubNumber: number; posts: Post[]; clientId: string }) {
   const hubPost = posts.find((p) => p.type === 'hub')
   const spokePosts = posts.filter((p) => p.type === 'spoke')
 
@@ -42,7 +42,7 @@ function HubSection({ hubNumber, posts }: { hubNumber: number; posts: Post[] }) 
         {posts.length < 6 && (
           <div className="px-5 py-3">
             <Link
-              href={`/clients/${posts[0]?.client_id}/posts/new?hub=${hubNumber}`}
+              href={`/clients/${clientId}/posts/new?hub=${hubNumber}`}
               className="text-xs text-gray-400 hover:text-orange-600 transition-colors"
             >
               + Add post to Hub {hubNumber}
@@ -153,6 +153,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
             key={hubNum}
             hubNumber={parseInt(hubNum)}
             posts={hubPosts}
+            clientId={id}
           />
         ))}
       </div>
