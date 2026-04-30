@@ -26,6 +26,8 @@ export async function createPostFolder(
   const auth = getAuth()
   const drive = google.drive({ version: 'v3', auth })
   const res = await drive.files.create({
+    // supportsAllDrives required for Shared Drives (Google Workspace Team Drives)
+    supportsAllDrives: true,
     requestBody: {
       name: folderName,
       mimeType: 'application/vnd.google-apps.folder',
@@ -43,6 +45,7 @@ export async function createFeedbackDoc(
   const auth = getAuth()
   const drive = google.drive({ version: 'v3', auth })
   const res = await drive.files.create({
+    supportsAllDrives: true,
     requestBody: {
       name: docName,
       mimeType: 'application/vnd.google-apps.document',
@@ -67,6 +70,7 @@ export async function createOutlineDoc(
 
   // Create the empty Google Doc in the specified folder
   const file = await drive.files.create({
+    supportsAllDrives: true,
     requestBody: {
       name: docName,
       mimeType: 'application/vnd.google-apps.document',
