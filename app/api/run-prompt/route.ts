@@ -8,8 +8,8 @@ function stripMarkdown(text: string): string {
   return text
     .split('\n')
     .map(line => {
-      // Convert horizontal rules (---, ***, ___) to empty lines
-      if (/^[-*_]{3,}\s*$/.test(line)) return ''
+      // Convert horizontal rules (---, ***, ___) to a visible text divider
+      if (/^[-*_]{3,}\s*$/.test(line)) return '─'.repeat(52)
       return line
         .replace(/^>\s*/g, '')            // blockquote markers: >
         .replace(/^#{1,6}\s*/g, '')       // heading markers: # ## ### etc.

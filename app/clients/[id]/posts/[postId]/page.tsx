@@ -3,13 +3,14 @@ export const dynamic = 'force-dynamic'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
-import { Post, STATUS_LABELS, STATUS_COLORS } from '@/types'
+import { Post } from '@/types'
 import StatusSelector from '@/components/StatusSelector'
 import PromptRunner from '@/components/PromptRunner'
 import ClientBriefInput from '@/components/ClientBriefInput'
 import CopyButton from '@/components/CopyButton'
 import OutlineEditor from '@/components/OutlineEditor'
 import DeletePostButton from '@/components/DeletePostButton'
+import CollapsibleSection from '@/components/CollapsibleSection'
 
 async function getPost(postId: string) {
   const { data } = await supabase
@@ -83,7 +84,7 @@ export default async function PostDetailPage({
         )}
       </div>
 
-      {/* Google Doc link — shown once a doc has been pushed */}
+      {/* Google Doc link */}
       {post.google_doc_url && (
         <div className="mb-5 flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-xl px-5 py-3">
           <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
@@ -101,66 +102,14 @@ export default async function PostDetailPage({
         </div>
       )}
 
-      {/* Stage */}
+      {/* Stage — not collapsible */}
       <section className="bg-white border border-gray-200 rounded-xl p-6 mb-2">
         <h2 className="text-sm font-semibold text-gray-700 mb-4">Stage</h2>
         <StatusSelector postId={post.id} currentStatus={post.status} clientId={id} />
       </section>
 
-      {/* Step 1 — Keyword Placement Map */}
-      <StepDivider step={1} label="Keyword Placement Map" />
-      <section className="mb-2">
-        <PromptRunner post={post} clientId={id} />
-      </section>
-
-      {/* Step 2 — The Outline */}
-      <StepDivider step={2} label="The Outline" />
-      {post.outline_output ? (
-        <OutlineEditor
-          postId={post.id}
-          clientId={id}
-          outline={post.outline_output}
-          hasClientDriveFolder={!!client.google_drive_folder_id}
-          existingDocUrl={post.google_doc_url ?? null}
-        />
-      ) : (
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-2 text-center">
-          <p className="text-sm text-gray-400">No outline saved yet. Run Prompt 02 above to generate one.</p>
-        </div>
-      )}
-
-      {/* Step 3 — Client Brief */}
-      <StepDivider step={3} label="Client Brief" />
-      <section className="bg-white border border-gray-200 rounded-xl p-6 mb-2">
-        <ClientBriefInput
-          postId={post.id}
-          clientId={id}
-          currentAnswers={post.client_brief_answers}
-        />
-      </section>
-
-      {/* Step 4 — Structural Flags & Draft */}
-      <StepDivider step={4} label="Structural Flags & Draft" />
-      {post.draft_output ? (
-        <section className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-5">
-          <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-gray-700">Saved Draft</h2>
-            <CopyButton text={post.draft_output} />
-          </div>
-          <div className="p-5">
-            <pre className="text-sm text-gray-700 whitespace-pre-wrap font-sans leading-relaxed">
-              {post.draft_output}
-            </pre>
-          </div>
-        </section>
-      ) : (
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-5 text-center">
-          <p className="text-sm text-gray-400">No draft saved yet. Run Prompt 03 once client brief answers are in.</p>
-        </div>
-      )}
-
-      {/* Post metadata */}
-      <div className="h-px bg-gray-200 my-8" />
+      {/* Post Metadata — right under Stage, not collapsible */}
+      <div className="h-px bg-gray-200 mt-6 mb-4" />
       <section className="bg-white border border-gray-200 rounded-xl p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-gray-700">Post Metadata</h2>
@@ -185,6 +134,61 @@ export default async function PostDetailPage({
           <MetaRow label="Post Goal" value={post.post_goal} />
         </div>
       </section>
+
+      {/* 1 · Prompt Runner — not collapsible */}
+      <StepDivider step={1} label="Prompt Runner" />
+      <section>
+        <PromptRunner post={post} clientId={id} />
+      </section>
+
+      {/* 2 · The Outline — collapsible */}
+      <CollapsibleSection step={2} label="The Outline">
+        {post.outline_output ? (
+          <OutlineEditor
+            postId={post.id}
+            clientId={id}
+            outline={post.outline_output}
+            hasClientDriveFolder={!!client.google_drive_folder_id}
+            existingDocUrl={post.google_doc_url ?? null}
+          />
+        ) : (
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-2 text-center">
+            <p className="text-sm text-gray-400">No outline saved yet. Run Prompt 02 above to generate one.</p>
+          </div>
+        )}
+      </CollapsibleSection>
+
+      {/* 3 · Client Brief — collapsible */}
+      <CollapsibleSection step={3} label="Client Brief">
+        <section className="bg-white border border-gray-200 rounded-xl p-6 mb-2">
+          <ClientBriefInput
+            postId={post.id}
+            clientId={id}
+            currentAnswers={post.client_brief_answers}
+          />
+        </section>
+      </CollapsibleSection>
+
+      {/* Drafts — collapsible, no step number */}
+      <CollapsibleSection label="Drafts">
+        {post.draft_output ? (
+          <section className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-5">
+            <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+              <h2 className="text-sm font-semibold text-gray-700">Saved Draft</h2>
+              <CopyButton text={post.draft_output} />
+            </div>
+            <div className="p-5">
+              <pre className="text-sm text-gray-700 whitespace-pre-wrap font-sans leading-relaxed">
+                {post.draft_output}
+              </pre>
+            </div>
+          </section>
+        ) : (
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-5 text-center">
+            <p className="text-sm text-gray-400">No draft saved yet. Run Prompt 03 once client brief answers are in.</p>
+          </div>
+        )}
+      </CollapsibleSection>
     </div>
   )
 }
