@@ -55,3 +55,45 @@ export async function createFeedbackDoc(
     url: res.data.webViewLink!,
   }
 }
+
+export async function createOutlineDoc(
+  folderId: string,
+  docName: string,
+  content: string,
+): Promise<{ id: string; url: string }> {
+  const auth = getAuth()
+  const drive = google.drive({ version: 'v3', auth })
+  const docs = google.docs({ version: 'v1', auth })
+
+  // Create the empty Google Doc in the specified folder
+  const file = await drive.files.create({
+    requestBody: {
+      name: docName,
+      mimeType: 'application/vnd.google-apps.document',
+      parents: [folderId],
+    },
+    fields: 'id,webViewLink',
+  })
+
+  const docId = file.data.id!
+
+  // Insert the outline content into the doc
+  await docs.documents.batchUpdate({
+    documentId: docId,
+    requestBody: {
+      requests: [
+        {
+          insertText: {
+            location: { index: 1 },
+            text: content,
+          },
+        },
+      ],
+    },
+  })
+
+  return {
+    id: docId,
+    url: file.data.webViewLink!,
+  }
+}

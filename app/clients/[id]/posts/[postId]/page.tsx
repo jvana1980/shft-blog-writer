@@ -8,6 +8,7 @@ import StatusSelector from '@/components/StatusSelector'
 import PromptRunner from '@/components/PromptRunner'
 import ClientBriefInput from '@/components/ClientBriefInput'
 import CopyButton from '@/components/CopyButton'
+import PushToDriveButton from '@/components/PushToDriveButton'
 
 async function getPost(postId: string) {
   const { data } = await supabase
@@ -15,7 +16,7 @@ async function getPost(postId: string) {
     .select('*, clients(*)')
     .eq('id', postId)
     .single()
-  return data as (Post & { clients: { id: string; name: string } }) | null
+  return data as (Post & { clients: { id: string; name: string; google_drive_folder_id: string | null } }) | null
 }
 
 function MetaRow({ label, value }: { label: string; value: string | null }) {
@@ -69,13 +70,13 @@ export default async function PostDetailPage({
         )}
       </div>
 
-      {/* Google Doc link */}
+      {/* Google Doc link — shown once a doc has been pushed */}
       {post.google_doc_url && (
         <div className="mb-5 flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-xl px-5 py-3">
           <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
             <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z" />
           </svg>
-          <span className="text-sm text-blue-700 flex-1">Client feedback doc ready</span>
+          <span className="text-sm text-blue-700 flex-1">Outline doc in Drive</span>
           <a
             href={post.google_doc_url}
             target="_blank"
@@ -112,9 +113,18 @@ export default async function PostDetailPage({
       {/* Saved outputs */}
       {post.outline_output && (
         <section className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-5">
-          <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-gray-700">Saved Outline</h2>
-            <CopyButton text={post.outline_output!} />
+          <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between gap-4">
+            <h2 className="text-sm font-semibold text-gray-700 flex-shrink-0">Saved Outline</h2>
+            <div className="flex items-center gap-3">
+              <CopyButton text={post.outline_output!} />
+              {client.google_drive_folder_id && (
+                <PushToDriveButton
+                  postId={post.id}
+                  clientId={id}
+                  existingDocUrl={post.google_doc_url ?? null}
+                />
+              )}
+            </div>
           </div>
           <div className="p-5">
             <pre className="text-sm text-gray-700 whitespace-pre-wrap font-sans leading-relaxed">

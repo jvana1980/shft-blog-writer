@@ -145,6 +145,48 @@ export async function savePostOutput(
   revalidatePath(`/clients/${clientId}/posts/${postId}`)
 }
 
+export async function pushOutlineToDrive(postId: string, clientId: string) {
+  const { data: post } = await supabase
+    .from('posts')
+    .select('*, clients(*)')
+    .eq('id', postId)
+    .single()
+
+  if (!post) throw new Error('Post not found')
+  if (!post.outline_output) throw new Error('No saved outline to push.')
+
+  const client = post.clients as { google_drive_folder_id: string | null }
+  if (!client?.google_drive_folder_id) {
+    throw new Error('No Google Drive folder set for this client. Add one in the client settings.')
+  }
+
+  const { createPostFolder, createOutlineDoc } = await import('./google')
+
+  // Build the folder + doc name from post data
+  const label = post.type === 'hub'
+    ? `Hub ${post.hub_number} - ${post.seo_title || 'Untitled'}`
+    : `Hub ${post.hub_number} Spoke - ${post.seo_title || 'Untitled'}`
+
+  // Create the subfolder if it doesn't exist yet, otherwise reuse it
+  let subfolderId = post.google_drive_subfolder_id as string | null
+  if (!subfolderId) {
+    subfolderId = await createPostFolder(client.google_drive_folder_id, label)
+    await supabase.from('posts').update({ google_drive_subfolder_id: subfolderId }).eq('id', postId)
+  }
+
+  // Always create a fresh outline doc (replaces the previous link)
+  const doc = await createOutlineDoc(subfolderId, `${label} Outline`, post.outline_output)
+
+  const { error } = await supabase
+    .from('posts')
+    .update({ google_doc_url: doc.url, updated_at: new Date().toISOString() })
+    .eq('id', postId)
+
+  if (error) throw new Error(error.message)
+  revalidatePath(`/clients/${clientId}/posts/${postId}`)
+  return { url: doc.url }
+}
+
 export async function updatePostMeta(postId: string, formData: FormData, clientId: string) {
   const updates = {
     seo_title: formData.get('seo_title') as string,
