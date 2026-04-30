@@ -169,8 +169,8 @@ export default async function PostDetailPage({
         </section>
       </CollapsibleSection>
 
-      {/* Drafts — collapsible, no step number */}
-      <CollapsibleSection label="Drafts">
+      {/* 4 · Drafts — collapsible */}
+      <CollapsibleSection step={4} label="Drafts">
         {post.draft_output ? (
           <section className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-5">
             <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
