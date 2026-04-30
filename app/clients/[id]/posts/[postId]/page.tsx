@@ -7,6 +7,7 @@ import { Post, STATUS_LABELS, STATUS_COLORS } from '@/types'
 import StatusSelector from '@/components/StatusSelector'
 import PromptRunner from '@/components/PromptRunner'
 import ClientBriefInput from '@/components/ClientBriefInput'
+import CopyButton from '@/components/CopyButton'
 
 async function getPost(postId: string) {
   const { data } = await supabase
@@ -113,13 +114,7 @@ export default async function PostDetailPage({
         <section className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-5">
           <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-700">Saved Outline</h2>
-            <button
-              onClick={() => {}}
-              className="text-xs text-gray-400 hover:text-gray-600"
-              title="Copy to clipboard"
-            >
-              Copy
-            </button>
+            <CopyButton text={post.outline_output!} />
           </div>
           <div className="p-5">
             <pre className="text-sm text-gray-700 whitespace-pre-wrap font-sans leading-relaxed">
