@@ -187,6 +187,13 @@ export async function pushOutlineToDrive(postId: string, clientId: string) {
   return { url: doc.url }
 }
 
+export async function deletePost(postId: string, clientId: string) {
+  const { error } = await supabase.from('posts').delete().eq('id', postId)
+  if (error) throw new Error(error.message)
+  revalidatePath(`/clients/${clientId}`)
+  redirect(`/clients/${clientId}`)
+}
+
 export async function updatePostMeta(postId: string, formData: FormData, clientId: string) {
   const updates = {
     seo_title: formData.get('seo_title') as string,

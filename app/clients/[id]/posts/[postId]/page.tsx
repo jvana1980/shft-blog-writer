@@ -9,6 +9,7 @@ import PromptRunner from '@/components/PromptRunner'
 import ClientBriefInput from '@/components/ClientBriefInput'
 import CopyButton from '@/components/CopyButton'
 import PushToDriveButton from '@/components/PushToDriveButton'
+import DeletePostButton from '@/components/DeletePostButton'
 
 async function getPost(postId: string) {
   const { data } = await supabase
@@ -151,12 +152,15 @@ export default async function PostDetailPage({
       <section className="bg-white border border-gray-200 rounded-xl p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-gray-700">Post Metadata</h2>
-          <Link
-            href={`/clients/${id}/posts/${postId}/edit`}
-            className="text-xs text-gray-400 hover:text-[#D48B00] transition-colors"
-          >
-            Edit →
-          </Link>
+          <div className="flex items-center gap-4">
+            <DeletePostButton postId={post.id} clientId={id} />
+            <Link
+              href={`/clients/${id}/posts/${postId}/edit`}
+              className="text-xs text-gray-400 hover:text-[#D48B00] transition-colors"
+            >
+              Edit →
+            </Link>
+          </div>
         </div>
         <div className="space-y-2.5">
           <MetaRow label="SEO Title" value={post.seo_title} />
