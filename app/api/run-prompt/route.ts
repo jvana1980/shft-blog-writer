@@ -4,24 +4,60 @@ import { supabase } from '@/lib/supabase'
 import { assemblePrompt } from '@/lib/prompts'
 import { PromptType } from '@/types'
 
-function stripMarkdown(text: string): string {
+// Used for outline (prompt 02) and ToV (prompt 04):
+// keeps ─── dividers between steps, strips all other markdown
+function stripMarkdownOutline(text: string): string {
   return text
     .split('\n')
     .map(line => {
-      // Convert horizontal rules (---, ***, ___) to a visible text divider
       if (/^[-*_]{3,}\s*$/.test(line)) return '─'.repeat(52)
       return line
-        .replace(/^>\s*/g, '')            // blockquote markers: >
-        .replace(/^#{1,6}\s*/g, '')       // heading markers: # ## ### etc.
-        .replace(/\*\*(.+?)\*\*/g, '$1') // bold: **text** → text
-        .replace(/__(.+?)__/g, '$1')     // bold: __text__ → text
-        .replace(/\*(.+?)\*/g, '$1')     // italic: *text* → text
-        .replace(/_(.+?)_/g, '$1')       // italic: _text_ → text
-        .replace(/\*+/g, '')             // any remaining asterisks
-        .replace(/`([^`]+)`/g, '$1')     // inline code: `code` → code
-        .replace(/```[\s\S]*?```/g, '')  // fenced code blocks
-        .replace(/`/g, '')               // any remaining backticks
-        .replace(/~~(.+?)~~/g, '$1')     // strikethrough: ~~text~~ → text
+        .replace(/^>\s*/g, '')
+        .replace(/^#{1,6}\s*/g, '')
+        .replace(/\*\*(.+?)\*\*/g, '$1')
+        .replace(/__(.+?)__/g, '$1')
+        .replace(/\*(.+?)\*/g, '$1')
+        .replace(/_(.+?)_/g, '$1')
+        .replace(/\*+/g, '')
+        .replace(/`([^`]+)`/g, '$1')
+        .replace(/```[\s\S]*?```/g, '')
+        .replace(/`/g, '')
+        .replace(/~~(.+?)~~/g, '$1')
+        .trimEnd()
+    })
+    .join('\n')
+}
+
+// Used for draft (prompt 03):
+// converts ## headings → H2: format, removes dividers, strips other markdown
+function stripMarkdownDraft(text: string): string {
+  return text
+    .split('\n')
+    .map(line => {
+      // Remove horizontal rules entirely so it reads like a blog post
+      if (/^[-*_]{3,}\s*$/.test(line)) return ''
+
+      // Convert markdown headings to H2/H3/H4 labels
+      const h4 = line.match(/^#{4}\s+(.+)/)
+      if (h4) return `H4: ${h4[1].replace(/\*\*/g, '').trim()}`
+      const h3 = line.match(/^#{3}\s+(.+)/)
+      if (h3) return `H3: ${h3[1].replace(/\*\*/g, '').trim()}`
+      const h2 = line.match(/^#{2}\s+(.+)/)
+      if (h2) return `H2: ${h2[1].replace(/\*\*/g, '').trim()}`
+      const h1 = line.match(/^#\s+(.+)/)
+      if (h1) return `H1: ${h1[1].replace(/\*\*/g, '').trim()}`
+
+      return line
+        .replace(/^>\s*/g, '')
+        .replace(/\*\*(.+?)\*\*/g, '$1')
+        .replace(/__(.+?)__/g, '$1')
+        .replace(/\*(.+?)\*/g, '$1')
+        .replace(/_(.+?)_/g, '$1')
+        .replace(/\*+/g, '')
+        .replace(/`([^`]+)`/g, '$1')
+        .replace(/```[\s\S]*?```/g, '')
+        .replace(/`/g, '')
+        .replace(/~~(.+?)~~/g, '$1')
         .trimEnd()
     })
     .join('\n')
@@ -35,7 +71,6 @@ export async function POST(req: NextRequest) {
   try {
     const { postId, promptType } = await req.json() as { postId: string; promptType: PromptType }
 
-    // Fetch post with client
     const { data: post, error: postError } = await supabase
       .from('posts')
       .select('*, clients(*)')
@@ -65,9 +100,10 @@ export async function POST(req: NextRequest) {
       .map((block) => (block as { type: 'text'; text: string }).text)
       .join('\n')
 
-    const output = stripMarkdown(rawOutput)
+    const output = promptType === '03'
+      ? stripMarkdownDraft(rawOutput)
+      : stripMarkdownOutline(rawOutput)
 
-    // Save run to audit log
     await supabase.from('prompt_runs').insert({
       post_id: postId,
       prompt_type: promptType,

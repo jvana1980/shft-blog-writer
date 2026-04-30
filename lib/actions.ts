@@ -198,6 +198,56 @@ export async function pushOutlineToDrive(
   }
 }
 
+export async function pushDraftToDrive(
+  postId: string,
+  clientId: string,
+): Promise<{ url: string } | { error: string }> {
+  try {
+    const { data: post } = await supabase
+      .from('posts')
+      .select('*, clients(*)')
+      .eq('id', postId)
+      .single()
+
+    if (!post) return { error: 'Post not found.' }
+    if (!post.draft_output) return { error: 'No saved draft to push.' }
+
+    const client = post.clients as { google_drive_folder_id: string | null }
+    if (!client?.google_drive_folder_id) {
+      return { error: 'No Google Drive folder set for this client. Add one in the client settings.' }
+    }
+
+    const { createPostFolder, createOutlineDoc } = await import('./google')
+
+    const spokeLabel = post.spoke_number != null ? `Spoke ${post.spoke_number}` : 'Spoke'
+    const label = post.type === 'hub'
+      ? `Hub ${post.hub_number} - ${post.seo_title || 'Untitled'}`
+      : `Hub ${post.hub_number} ${spokeLabel} - ${post.seo_title || 'Untitled'}`
+
+    // Reuse existing subfolder or create one
+    let subfolderId = post.google_drive_subfolder_id as string | null
+    if (!subfolderId) {
+      subfolderId = await createPostFolder(client.google_drive_folder_id, label)
+      await supabase.from('posts').update({ google_drive_subfolder_id: subfolderId }).eq('id', postId)
+    }
+
+    const doc = await createOutlineDoc(subfolderId, `${label} Post Draft`, post.draft_output)
+
+    const { error: dbError } = await supabase
+      .from('posts')
+      .update({ draft_doc_url: doc.url, updated_at: new Date().toISOString() })
+      .eq('id', postId)
+
+    if (dbError) return { error: `Database error: ${dbError.message}` }
+
+    revalidatePath(`/clients/${clientId}/posts/${postId}`)
+    return { url: doc.url }
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    return { error: msg }
+  }
+}
+
 export async function clearPostOutput(
   postId: string,
   field: 'outline_output' | 'draft_output',

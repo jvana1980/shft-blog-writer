@@ -7,8 +7,8 @@ import { Post } from '@/types'
 import StatusSelector from '@/components/StatusSelector'
 import PromptRunner from '@/components/PromptRunner'
 import ClientBriefInput from '@/components/ClientBriefInput'
-import CopyButton from '@/components/CopyButton'
 import OutlineEditor from '@/components/OutlineEditor'
+import DraftEditor from '@/components/DraftEditor'
 import DeletePostButton from '@/components/DeletePostButton'
 import CollapsibleSection from '@/components/CollapsibleSection'
 
@@ -178,17 +178,13 @@ export default async function PostDetailPage({
       {/* 4 · Drafts — collapsible */}
       <CollapsibleSection step={4} label="Drafts">
         {post.draft_output ? (
-          <section className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-5">
-            <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-gray-700">Saved Draft</h2>
-              <CopyButton text={post.draft_output} />
-            </div>
-            <div className="p-5">
-              <pre className="text-sm text-gray-700 whitespace-pre-wrap font-sans leading-relaxed">
-                {post.draft_output}
-              </pre>
-            </div>
-          </section>
+          <DraftEditor
+            postId={post.id}
+            clientId={id}
+            draft={post.draft_output}
+            hasClientDriveFolder={!!client.google_drive_folder_id}
+            existingDocUrl={post.draft_doc_url ?? null}
+          />
         ) : (
           <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-5 text-center">
             <p className="text-sm text-gray-400">No draft saved yet. Run Prompt 03 once client brief answers are in.</p>

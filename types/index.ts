@@ -44,6 +44,7 @@ export interface Post {
   outline_output: string | null
   draft_output: string | null
   google_doc_url: string | null
+  draft_doc_url: string | null
   google_drive_subfolder_id: string | null
   created_at: string
   updated_at: string
