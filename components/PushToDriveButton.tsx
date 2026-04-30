@@ -19,7 +19,11 @@ export default function PushToDriveButton({ postId, clientId, existingDocUrl }: 
     setError('')
     try {
       const result = await pushOutlineToDrive(postId, clientId)
-      setDocUrl(result.url)
+      if ('error' in result) {
+        setError(result.error)
+      } else {
+        setDocUrl(result.url)
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong.')
     } finally {
