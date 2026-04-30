@@ -28,6 +28,7 @@ export interface Post {
   id: string
   client_id: string
   hub_number: number
+  spoke_number: number | null
   type: PostType
   seo_title: string | null
   h1_title: string | null

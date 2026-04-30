@@ -74,6 +74,7 @@ export async function createPost(formData: FormData) {
   const client_id = formData.get('client_id') as string
   const hub_number = parseInt(formData.get('hub_number') as string)
   const type = formData.get('type') as 'hub' | 'spoke'
+  const spoke_number = type === 'spoke' ? parseInt(formData.get('spoke_number') as string) || null : null
   const seo_title = formData.get('seo_title') as string
   const h1_title = formData.get('h1_title') as string
   const subtitle = formData.get('subtitle') as string
@@ -108,7 +109,7 @@ export async function createPost(formData: FormData) {
   }
 
   const { error } = await supabase.from('posts').insert({
-    client_id, hub_number, type, seo_title, h1_title, subtitle,
+    client_id, hub_number, spoke_number, type, seo_title, h1_title, subtitle,
     meta_description, slug, primary_keyword, secondary_keywords,
     target_audience, post_goal, status: 'not_started',
     google_doc_url, google_drive_subfolder_id,
@@ -163,9 +164,10 @@ export async function pushOutlineToDrive(postId: string, clientId: string) {
   const { createPostFolder, createOutlineDoc } = await import('./google')
 
   // Build the folder + doc name from post data
+  const spokeLabel = post.spoke_number != null ? `Spoke ${post.spoke_number}` : 'Spoke'
   const label = post.type === 'hub'
     ? `Hub ${post.hub_number} - ${post.seo_title || 'Untitled'}`
-    : `Hub ${post.hub_number} Spoke - ${post.seo_title || 'Untitled'}`
+    : `Hub ${post.hub_number} ${spokeLabel} - ${post.seo_title || 'Untitled'}`
 
   // Create the subfolder if it doesn't exist yet, otherwise reuse it
   let subfolderId = post.google_drive_subfolder_id as string | null
@@ -208,8 +210,12 @@ export async function deletePost(postId: string, clientId: string) {
   redirect(`/clients/${clientId}`)
 }
 
-export async function updatePostMeta(postId: string, formData: FormData, clientId: string) {
+export async function updatePostMeta(postId: string, clientId: string, formData: FormData) {
+  const type = formData.get('type') as string
   const updates = {
+    hub_number: parseInt(formData.get('hub_number') as string),
+    spoke_number: type === 'spoke' ? parseInt(formData.get('spoke_number') as string) || null : null,
+    type,
     seo_title: formData.get('seo_title') as string,
     h1_title: formData.get('h1_title') as string,
     subtitle: formData.get('subtitle') as string,

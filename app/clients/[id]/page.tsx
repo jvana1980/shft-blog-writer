@@ -12,6 +12,7 @@ async function getClient(id: string) {
     .eq('id', id)
     .order('hub_number', { referencedTable: 'posts' })
     .order('type', { referencedTable: 'posts' })
+    .order('spoke_number', { referencedTable: 'posts', nullsFirst: false })
     .single()
   return data
 }
@@ -63,11 +64,15 @@ function PostRow({ post, isHub }: { post: Post; isHub?: boolean }) {
       <div className="flex-shrink-0 w-1 h-8 rounded-full bg-gray-200 group-hover:bg-[#D48B00] transition-colors" />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          {isHub && (
-            <span className="text-xs font-medium text-[#D48B00] bg-[#D48B00]/10 px-1.5 py-0.5 rounded">
+          {isHub ? (
+            <span className="text-xs font-medium text-[#D48B00] bg-[#D48B00]/10 px-1.5 py-0.5 rounded flex-shrink-0">
               HUB
             </span>
-          )}
+          ) : post.spoke_number != null ? (
+            <span className="text-xs font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded flex-shrink-0">
+              S{post.spoke_number}
+            </span>
+          ) : null}
           <p className="text-sm text-gray-800 font-medium truncate">
             {post.seo_title || <span className="text-gray-400 italic">Untitled post</span>}
           </p>

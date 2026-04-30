@@ -73,7 +73,10 @@ export default async function PostDetailPage({
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-2">
           <span className="text-xs font-medium text-[#D48B00] bg-[#D48B00]/10 px-2 py-0.5 rounded uppercase">
-            {post.type} · Hub {post.hub_number}
+            Hub {post.hub_number}
+            {post.type === 'spoke'
+              ? ` · Spoke ${post.spoke_number ?? ''}`
+              : ' · Hub Page'}
           </span>
         </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-1">
