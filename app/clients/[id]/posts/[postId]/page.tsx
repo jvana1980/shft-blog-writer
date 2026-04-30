@@ -54,6 +54,9 @@ export default async function PostDetailPage({
 
   const client = post.clients
 
+  // Collapse the outline by default once the client brief stage has been reached
+  const outlineDefaultOpen = !['client_input_received', 'draft_done', 'shft_review', 'client_review', 'approved', 'published'].includes(post.status)
+
   return (
     <div className="p-8 max-w-3xl">
       {/* Breadcrumb */}
@@ -147,8 +150,8 @@ export default async function PostDetailPage({
         <PromptRunner post={post} clientId={id} />
       </section>
 
-      {/* 2 · The Outline — collapsible */}
-      <CollapsibleSection step={2} label="The Outline">
+      {/* 2 · The Outline — collapsible, auto-collapsed in later stages */}
+      <CollapsibleSection step={2} label="The Outline" defaultOpen={outlineDefaultOpen}>
         {post.outline_output ? (
           <OutlineEditor
             postId={post.id}
