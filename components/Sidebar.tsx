@@ -7,11 +7,11 @@ export default function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="w-56 bg-slate-900 text-white flex flex-col flex-shrink-0">
+    <aside className="w-56 bg-[#050505] text-white flex flex-col flex-shrink-0">
       {/* Logo */}
-      <div className="px-5 py-6 border-b border-slate-700">
+      <div className="px-5 py-6 border-b border-white/10">
         <span className="text-lg font-bold tracking-tight">SHFT</span>
-        <span className="text-slate-400 text-sm block mt-0.5">Blog Writer</span>
+        <span className="text-white/40 text-sm block mt-0.5">Blog Writer</span>
       </div>
 
       {/* Nav */}
@@ -20,8 +20,8 @@ export default function Sidebar() {
           href="/"
           className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
             pathname === '/'
-              ? 'bg-slate-700 text-white'
-              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+              ? 'bg-white/10 text-white'
+              : 'text-white/60 hover:bg-white/5 hover:text-white'
           }`}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -34,8 +34,8 @@ export default function Sidebar() {
           href="/clients/new"
           className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
             pathname === '/clients/new'
-              ? 'bg-slate-700 text-white'
-              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+              ? 'bg-white/10 text-white'
+              : 'text-white/60 hover:bg-white/5 hover:text-white'
           }`}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,8 +46,8 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="px-5 py-4 border-t border-slate-700">
-        <p className="text-xs text-slate-500">Phase 1 — Internal</p>
+      <div className="px-5 py-4 border-t border-white/10">
+        <p className="text-xs text-white/20">Phase 1 — Internal</p>
       </div>
     </aside>
   )

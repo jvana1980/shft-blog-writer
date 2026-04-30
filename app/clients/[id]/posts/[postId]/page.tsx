@@ -56,7 +56,7 @@ export default async function PostDetailPage({
       {/* Post header */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-xs font-medium text-orange-600 bg-orange-50 px-2 py-0.5 rounded uppercase">
+          <span className="text-xs font-medium text-[#D48B00] bg-[#D48B00]/10 px-2 py-0.5 rounded uppercase">
             {post.type} · Hub {post.hub_number}
           </span>
         </div>
@@ -67,6 +67,24 @@ export default async function PostDetailPage({
           <p className="text-gray-500 text-sm italic">{post.subtitle}</p>
         )}
       </div>
+
+      {/* Google Doc link */}
+      {post.google_doc_url && (
+        <div className="mb-5 flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-xl px-5 py-3">
+          <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z" />
+          </svg>
+          <span className="text-sm text-blue-700 flex-1">Client feedback doc ready</span>
+          <a
+            href={post.google_doc_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-medium text-blue-600 hover:text-blue-800 border border-blue-200 hover:border-blue-400 px-3 py-1 rounded-md transition-colors"
+          >
+            Open in Drive →
+          </a>
+        </div>
+      )}
 
       {/* Status */}
       <section className="bg-white border border-gray-200 rounded-xl p-6 mb-5">
@@ -130,7 +148,7 @@ export default async function PostDetailPage({
           <h2 className="text-sm font-semibold text-gray-700">Post Metadata</h2>
           <Link
             href={`/clients/${id}/posts/${postId}/edit`}
-            className="text-xs text-gray-400 hover:text-orange-600 transition-colors"
+            className="text-xs text-gray-400 hover:text-[#D48B00] transition-colors"
           >
             Edit →
           </Link>

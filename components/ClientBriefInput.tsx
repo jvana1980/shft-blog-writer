@@ -32,13 +32,13 @@ export default function ClientBriefInput({ postId, clientId, currentAnswers }: P
         value={answers}
         onChange={(e) => setAnswers(e.target.value)}
         rows={12}
-        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 font-mono"
+        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00] font-mono"
         placeholder="Paste client brief answers here..."
       />
       <button
         onClick={handleSave}
         disabled={saving}
-        className="text-sm font-medium px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-orange-300 text-white rounded-lg transition-colors"
+        className="text-sm font-medium px-4 py-2 bg-[#D48B00] hover:bg-[#b87700] disabled:opacity-50 text-white rounded-lg transition-colors"
       >
         {saved ? 'Saved ✓' : saving ? 'Saving...' : 'Save Answers'}
       </button>

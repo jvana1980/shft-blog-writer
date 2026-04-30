@@ -47,7 +47,7 @@ export default async function EditPostPage({
             <select
               name="hub_number"
               defaultValue={post.hub_number}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             >
               {[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>Hub {n}</option>)}
             </select>
@@ -57,7 +57,7 @@ export default async function EditPostPage({
             <select
               name="type"
               defaultValue={post.type}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             >
               <option value="spoke">Spoke Post</option>
               <option value="hub">Hub Page</option>
@@ -78,7 +78,7 @@ export default async function EditPostPage({
             <input
               name={name}
               defaultValue={post[name] || ''}
-              className={`w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 ${mono ? 'font-mono' : ''}`}
+              className={`w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00] ${mono ? 'font-mono' : ''}`}
             />
           </div>
         ))}
@@ -94,7 +94,7 @@ export default async function EditPostPage({
               name={name}
               rows={rows}
               defaultValue={post[name] || ''}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             />
           </div>
         ))}
@@ -102,7 +102,7 @@ export default async function EditPostPage({
         <div className="flex gap-3 pt-2">
           <button
             type="submit"
-            className="bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors"
+            className="bg-[#D48B00] hover:bg-[#b87700] text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors"
           >
             Save Changes
           </button>

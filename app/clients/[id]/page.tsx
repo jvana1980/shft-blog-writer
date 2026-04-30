@@ -43,7 +43,7 @@ function HubSection({ hubNumber, posts, clientId }: { hubNumber: number; posts: 
           <div className="px-5 py-3">
             <Link
               href={`/clients/${clientId}/posts/new?hub=${hubNumber}`}
-              className="text-xs text-gray-400 hover:text-orange-600 transition-colors"
+              className="text-xs text-gray-400 hover:text-[#D48B00] transition-colors"
             >
               + Add post to Hub {hubNumber}
             </Link>
@@ -58,13 +58,13 @@ function PostRow({ post, isHub }: { post: Post; isHub?: boolean }) {
   return (
     <Link
       href={`/clients/${post.client_id}/posts/${post.id}`}
-      className="flex items-center gap-3 px-5 py-3 hover:bg-orange-50 transition-colors group"
+      className="flex items-center gap-3 px-5 py-3 hover:bg-[#D48B00]/5 transition-colors group"
     >
-      <div className="flex-shrink-0 w-1 h-8 rounded-full bg-gray-200 group-hover:bg-orange-400 transition-colors" />
+      <div className="flex-shrink-0 w-1 h-8 rounded-full bg-gray-200 group-hover:bg-[#D48B00] transition-colors" />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           {isHub && (
-            <span className="text-xs font-medium text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded">
+            <span className="text-xs font-medium text-[#D48B00] bg-[#D48B00]/10 px-1.5 py-0.5 rounded">
               HUB
             </span>
           )}
@@ -120,7 +120,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
         <div className="flex gap-2">
           <Link
             href={`/clients/${id}/posts/new`}
-            className="bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+            className="bg-[#D48B00] hover:bg-[#b87700] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
           >
             + Add Post
           </Link>

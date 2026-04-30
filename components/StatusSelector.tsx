@@ -50,7 +50,7 @@ export default function StatusSelector({ postId, currentStatus, clientId }: Prop
                 ? `${STATUS_COLORS[s]} border-transparent font-semibold`
                 : i < currentIndex
                 ? 'border-gray-200 text-gray-400 bg-gray-50 hover:border-gray-300'
-                : 'border-gray-200 text-gray-500 hover:border-orange-300 hover:text-orange-600'
+                : 'border-gray-200 text-gray-500 hover:border-[#D48B00]/50 hover:text-[#D48B00]'
             }`}
           >
             {STATUS_LABELS[s]}

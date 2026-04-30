@@ -81,7 +81,7 @@ export default async function Dashboard() {
         </div>
         <Link
           href="/clients/new"
-          className="bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          className="bg-[#D48B00] hover:bg-[#b87700] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
         >
           + Add Client
         </Link>
@@ -92,7 +92,7 @@ export default async function Dashboard() {
           <p className="text-gray-400 text-sm">No clients yet.</p>
           <Link
             href="/clients/new"
-            className="mt-4 inline-block text-orange-600 hover:text-orange-700 text-sm font-medium"
+            className="mt-4 inline-block text-[#D48B00] hover:text-[#b87700] text-sm font-medium"
           >
             Add your first client →
           </Link>
@@ -103,16 +103,16 @@ export default async function Dashboard() {
             <Link
               key={client.id}
               href={`/clients/${client.id}`}
-              className="bg-white border border-gray-200 rounded-xl p-6 hover:border-orange-300 hover:shadow-sm transition-all group"
+              className="bg-white border border-gray-200 rounded-xl p-6 hover:border-[#D48B00]/40 hover:shadow-sm transition-all group"
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h2 className="font-semibold text-gray-900 group-hover:text-orange-600 transition-colors">
+                  <h2 className="font-semibold text-gray-900 group-hover:text-[#D48B00] transition-colors">
                     {client.name}
                   </h2>
                   <p className="text-xs text-gray-400 mt-0.5">/{client.slug}</p>
                 </div>
-                <svg className="w-4 h-4 text-gray-300 group-hover:text-orange-400 transition-colors mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-gray-300 group-hover:text-[#D48B00] transition-colors mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </div>

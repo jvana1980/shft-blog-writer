@@ -19,6 +19,8 @@ export interface Client {
   slug: string
   tov_guide: string | null
   brand_strategy: string | null
+  google_drive_folder_id: string | null
+  google_drive_folder_url: string | null
   created_at: string
 }
 
@@ -40,6 +42,8 @@ export interface Post {
   client_brief_answers: string | null
   outline_output: string | null
   draft_output: string | null
+  google_doc_url: string | null
+  google_drive_subfolder_id: string | null
   created_at: string
   updated_at: string
   clients?: Client

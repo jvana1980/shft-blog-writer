@@ -37,7 +37,21 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
             name="name"
             required
             defaultValue={client.name}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            Google Drive Folder URL <span className="text-gray-400 font-normal">(optional)</span>
+          </label>
+          <p className="text-xs text-gray-400 mb-2">The client's main Drive folder for post subfolders.</p>
+          <input
+            name="google_drive_folder_url"
+            type="url"
+            defaultValue={client.google_drive_folder_url || ''}
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
+            placeholder="https://drive.google.com/drive/folders/..."
           />
         </div>
 
@@ -48,7 +62,7 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
             name="tov_guide"
             rows={16}
             defaultValue={client.tov_guide || ''}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 font-mono"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00] font-mono"
           />
         </div>
 
@@ -60,14 +74,14 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
             name="brand_strategy"
             rows={8}
             defaultValue={client.brand_strategy || ''}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 font-mono"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00] font-mono"
           />
         </div>
 
         <div className="flex gap-3 pt-2">
           <button
             type="submit"
-            className="bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors"
+            className="bg-[#D48B00] hover:bg-[#b87700] text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors"
           >
             Save Changes
           </button>

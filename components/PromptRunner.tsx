@@ -76,7 +76,7 @@ export default function PromptRunner({ post, clientId }: Props) {
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-medium text-orange-600 bg-orange-50 px-2 py-0.5 rounded">
+              <span className="text-xs font-medium text-[#D48B00] bg-[#D48B00]/10 px-2 py-0.5 rounded">
                 Prompt {promptType}
               </span>
               <h3 className="text-sm font-semibold text-gray-900">
@@ -88,7 +88,7 @@ export default function PromptRunner({ post, clientId }: Props) {
           <button
             onClick={runPrompt}
             disabled={loading}
-            className="flex-shrink-0 bg-orange-600 hover:bg-orange-700 disabled:bg-orange-300 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+            className="flex-shrink-0 bg-[#D48B00] hover:bg-[#b87700] disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
           >
             {loading ? (
               <>

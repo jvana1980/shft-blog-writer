@@ -46,7 +46,7 @@ export default async function NewPostPage({
             <select
               name="hub_number"
               defaultValue={hub || '1'}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             >
               {[1, 2, 3, 4, 5].map((n) => (
                 <option key={n} value={n}>Hub {n}</option>
@@ -57,7 +57,7 @@ export default async function NewPostPage({
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Type</label>
             <select
               name="type"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             >
               <option value="spoke">Spoke Post</option>
               <option value="hub">Hub Page</option>
@@ -69,7 +69,7 @@ export default async function NewPostPage({
           <label className="block text-sm font-medium text-gray-700 mb-1.5">SEO Title (title tag)</label>
           <input
             name="seo_title"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             placeholder="e.g. B2B Marketing Channels: How to Pick the Right Ones"
           />
         </div>
@@ -78,7 +78,7 @@ export default async function NewPostPage({
           <label className="block text-sm font-medium text-gray-700 mb-1.5">On-Page Title (H1)</label>
           <input
             name="h1_title"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             placeholder="e.g. How to Choose the Right B2B Marketing Channels"
           />
         </div>
@@ -87,7 +87,7 @@ export default async function NewPostPage({
           <label className="block text-sm font-medium text-gray-700 mb-1.5">Subtitle</label>
           <input
             name="subtitle"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             placeholder="e.g. Be in fewer places. Attract better clients."
           />
         </div>
@@ -97,7 +97,7 @@ export default async function NewPostPage({
           <textarea
             name="meta_description"
             rows={2}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             placeholder="Under 160 characters..."
           />
         </div>
@@ -106,7 +106,7 @@ export default async function NewPostPage({
           <label className="block text-sm font-medium text-gray-700 mb-1.5">URL Slug</label>
           <input
             name="slug"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 font-mono"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00] font-mono"
             placeholder="e.g. b2b-content-strategy/marketing-channels"
           />
         </div>
@@ -115,7 +115,7 @@ export default async function NewPostPage({
           <label className="block text-sm font-medium text-gray-700 mb-1.5">Primary Keyword</label>
           <input
             name="primary_keyword"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             placeholder="e.g. b2b marketing channels"
           />
         </div>
@@ -124,7 +124,7 @@ export default async function NewPostPage({
           <label className="block text-sm font-medium text-gray-700 mb-1.5">Secondary Keywords</label>
           <input
             name="secondary_keywords"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             placeholder="e.g. best b2b marketing channels (140/9); b2b channel marketing (260/17)"
           />
         </div>
@@ -134,7 +134,7 @@ export default async function NewPostPage({
           <textarea
             name="target_audience"
             rows={2}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             placeholder="Who is this post for? What do they know? What problem are they trying to solve?"
           />
         </div>
@@ -144,7 +144,7 @@ export default async function NewPostPage({
           <textarea
             name="post_goal"
             rows={2}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D48B00]"
             placeholder="What should the reader do or understand by the end?"
           />
         </div>
@@ -152,7 +152,7 @@ export default async function NewPostPage({
         <div className="flex gap-3 pt-2">
           <button
             type="submit"
-            className="bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors"
+            className="bg-[#D48B00] hover:bg-[#b87700] text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors"
           >
             Add Post
           </button>
