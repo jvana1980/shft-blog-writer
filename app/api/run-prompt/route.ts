@@ -7,13 +7,23 @@ import { PromptType } from '@/types'
 function stripMarkdown(text: string): string {
   return text
     .split('\n')
-    .map(line =>
-      line
-        .replace(/^>\s*/g, '')   // remove blockquote markers: > or >  at line start
-        .replace(/\*\*/g, '')    // remove bold markers: **
-        .replace(/\*/g, '')      // remove remaining asterisks: *
-        .trimEnd()               // clean up any trailing spaces left behind
-    )
+    .map(line => {
+      // Convert horizontal rules (---, ***, ___) to empty lines
+      if (/^[-*_]{3,}\s*$/.test(line)) return ''
+      return line
+        .replace(/^>\s*/g, '')            // blockquote markers: >
+        .replace(/^#{1,6}\s*/g, '')       // heading markers: # ## ### etc.
+        .replace(/\*\*(.+?)\*\*/g, '$1') // bold: **text** → text
+        .replace(/__(.+?)__/g, '$1')     // bold: __text__ → text
+        .replace(/\*(.+?)\*/g, '$1')     // italic: *text* → text
+        .replace(/_(.+?)_/g, '$1')       // italic: _text_ → text
+        .replace(/\*+/g, '')             // any remaining asterisks
+        .replace(/`([^`]+)`/g, '$1')     // inline code: `code` → code
+        .replace(/```[\s\S]*?```/g, '')  // fenced code blocks
+        .replace(/`/g, '')               // any remaining backticks
+        .replace(/~~(.+?)~~/g, '$1')     // strikethrough: ~~text~~ → text
+        .trimEnd()
+    })
     .join('\n')
 }
 
