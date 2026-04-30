@@ -4,6 +4,19 @@ import { supabase } from '@/lib/supabase'
 import { assemblePrompt } from '@/lib/prompts'
 import { PromptType } from '@/types'
 
+function stripMarkdown(text: string): string {
+  return text
+    .split('\n')
+    .map(line =>
+      line
+        .replace(/^>\s*/g, '')   // remove blockquote markers: > or >  at line start
+        .replace(/\*\*/g, '')    // remove bold markers: **
+        .replace(/\*/g, '')      // remove remaining asterisks: *
+        .trimEnd()               // clean up any trailing spaces left behind
+    )
+    .join('\n')
+}
+
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
 })
@@ -37,10 +50,12 @@ export async function POST(req: NextRequest) {
       messages: [{ role: 'user', content: user }],
     })
 
-    const output = message.content
+    const rawOutput = message.content
       .filter((block) => block.type === 'text')
       .map((block) => (block as { type: 'text'; text: string }).text)
       .join('\n')
+
+    const output = stripMarkdown(rawOutput)
 
     // Save run to audit log
     await supabase.from('prompt_runs').insert({
