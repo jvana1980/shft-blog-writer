@@ -140,6 +140,9 @@ export default async function PostDetailPage({
 
       {/* 1 · Prompt Runner — not collapsible */}
       <StepDivider step={1} label="Prompt Runner" />
+      <p className="text-xs text-gray-400 mb-4 -mt-1">
+        The available prompt changes based on the current Stage. Update the Stage above to unlock the next prompt.
+      </p>
       <section>
         <PromptRunner post={post} clientId={id} />
       </section>
