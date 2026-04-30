@@ -187,6 +187,20 @@ export async function pushOutlineToDrive(postId: string, clientId: string) {
   return { url: doc.url }
 }
 
+export async function clearPostOutput(
+  postId: string,
+  field: 'outline_output' | 'draft_output',
+  clientId: string,
+) {
+  const { error } = await supabase
+    .from('posts')
+    .update({ [field]: null, updated_at: new Date().toISOString() })
+    .eq('id', postId)
+
+  if (error) throw new Error(error.message)
+  revalidatePath(`/clients/${clientId}/posts/${postId}`)
+}
+
 export async function deletePost(postId: string, clientId: string) {
   const { error } = await supabase.from('posts').delete().eq('id', postId)
   if (error) throw new Error(error.message)

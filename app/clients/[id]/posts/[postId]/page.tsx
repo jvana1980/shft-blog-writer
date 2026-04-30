@@ -8,7 +8,7 @@ import StatusSelector from '@/components/StatusSelector'
 import PromptRunner from '@/components/PromptRunner'
 import ClientBriefInput from '@/components/ClientBriefInput'
 import CopyButton from '@/components/CopyButton'
-import PushToDriveButton from '@/components/PushToDriveButton'
+import OutlineEditor from '@/components/OutlineEditor'
 import DeletePostButton from '@/components/DeletePostButton'
 
 async function getPost(postId: string) {
@@ -26,6 +26,18 @@ function MetaRow({ label, value }: { label: string; value: string | null }) {
     <div className="flex gap-3 text-sm">
       <span className="text-gray-400 w-36 flex-shrink-0">{label}</span>
       <span className="text-gray-800">{value}</span>
+    </div>
+  )
+}
+
+function StepDivider({ step, label }: { step: number; label: string }) {
+  return (
+    <div className="flex items-center gap-3 mt-8 mb-4">
+      <div className="w-6 h-6 rounded-full bg-[#D48B00]/10 flex items-center justify-center flex-shrink-0">
+        <span className="text-[10px] font-bold text-[#D48B00]">{step}</span>
+      </div>
+      <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest">{label}</span>
+      <div className="flex-1 h-px bg-gray-200" />
     </div>
   )
 }
@@ -57,7 +69,7 @@ export default async function PostDetailPage({
       </div>
 
       {/* Post header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <div className="flex items-center gap-2 mb-2">
           <span className="text-xs font-medium text-[#D48B00] bg-[#D48B00]/10 px-2 py-0.5 rounded uppercase">
             {post.type} · Hub {post.hub_number}
@@ -89,21 +101,37 @@ export default async function PostDetailPage({
         </div>
       )}
 
-      {/* Status */}
-      <section className="bg-white border border-gray-200 rounded-xl p-6 mb-5">
+      {/* Stage */}
+      <section className="bg-white border border-gray-200 rounded-xl p-6 mb-2">
         <h2 className="text-sm font-semibold text-gray-700 mb-4">Stage</h2>
         <StatusSelector postId={post.id} currentStatus={post.status} clientId={id} />
       </section>
 
-      {/* Prompt Runner */}
-      <section className="mb-5">
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">Prompt Runner</h2>
+      {/* Step 1 — Keyword Placement Map */}
+      <StepDivider step={1} label="Keyword Placement Map" />
+      <section className="mb-2">
         <PromptRunner post={post} clientId={id} />
       </section>
 
-      {/* Client Brief Answers */}
-      <section className="bg-white border border-gray-200 rounded-xl p-6 mb-5">
-        <h2 className="text-sm font-semibold text-gray-700 mb-4">Client Input</h2>
+      {/* Step 2 — The Outline */}
+      <StepDivider step={2} label="The Outline" />
+      {post.outline_output ? (
+        <OutlineEditor
+          postId={post.id}
+          clientId={id}
+          outline={post.outline_output}
+          hasClientDriveFolder={!!client.google_drive_folder_id}
+          existingDocUrl={post.google_doc_url ?? null}
+        />
+      ) : (
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-2 text-center">
+          <p className="text-sm text-gray-400">No outline saved yet. Run Prompt 02 above to generate one.</p>
+        </div>
+      )}
+
+      {/* Step 3 — Client Brief */}
+      <StepDivider step={3} label="Client Brief" />
+      <section className="bg-white border border-gray-200 rounded-xl p-6 mb-2">
         <ClientBriefInput
           postId={post.id}
           clientId={id}
@@ -111,34 +139,13 @@ export default async function PostDetailPage({
         />
       </section>
 
-      {/* Saved outputs */}
-      {post.outline_output && (
+      {/* Step 4 — Structural Flags & Draft */}
+      <StepDivider step={4} label="Structural Flags & Draft" />
+      {post.draft_output ? (
         <section className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-5">
-          <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between gap-4">
-            <h2 className="text-sm font-semibold text-gray-700 flex-shrink-0">Saved Outline</h2>
-            <div className="flex items-center gap-3">
-              <CopyButton text={post.outline_output!} />
-              {client.google_drive_folder_id && (
-                <PushToDriveButton
-                  postId={post.id}
-                  clientId={id}
-                  existingDocUrl={post.google_doc_url ?? null}
-                />
-              )}
-            </div>
-          </div>
-          <div className="p-5">
-            <pre className="text-sm text-gray-700 whitespace-pre-wrap font-sans leading-relaxed">
-              {post.outline_output}
-            </pre>
-          </div>
-        </section>
-      )}
-
-      {post.draft_output && (
-        <section className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-5">
-          <div className="px-5 py-3 bg-gray-50 border-b border-gray-100">
+          <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-700">Saved Draft</h2>
+            <CopyButton text={post.draft_output} />
           </div>
           <div className="p-5">
             <pre className="text-sm text-gray-700 whitespace-pre-wrap font-sans leading-relaxed">
@@ -146,9 +153,14 @@ export default async function PostDetailPage({
             </pre>
           </div>
         </section>
+      ) : (
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-5 text-center">
+          <p className="text-sm text-gray-400">No draft saved yet. Run Prompt 03 once client brief answers are in.</p>
+        </div>
       )}
 
       {/* Post metadata */}
+      <div className="h-px bg-gray-200 my-8" />
       <section className="bg-white border border-gray-200 rounded-xl p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-gray-700">Post Metadata</h2>
