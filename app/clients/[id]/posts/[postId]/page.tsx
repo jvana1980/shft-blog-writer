@@ -54,8 +54,9 @@ export default async function PostDetailPage({
 
   const client = post.clients
 
-  // Collapse the outline by default once the client brief stage has been reached
-  const outlineDefaultOpen = !['client_input_received', 'draft_done', 'shft_review', 'client_review', 'approved', 'published'].includes(post.status)
+  const laterStages = ['client_input_received', 'draft_done', 'shft_review', 'client_review', 'approved', 'published']
+  const outlineDefaultOpen = !laterStages.includes(post.status)
+  const briefDefaultOpen = !laterStages.includes(post.status)
 
   return (
     <div className="p-8 max-w-3xl">
@@ -167,8 +168,8 @@ export default async function PostDetailPage({
         )}
       </CollapsibleSection>
 
-      {/* 3 · Client Brief — collapsible */}
-      <CollapsibleSection step={3} label="Client Brief">
+      {/* 3 · Client Brief — collapsible, auto-collapsed in later stages */}
+      <CollapsibleSection step={3} label="Client Brief" defaultOpen={briefDefaultOpen}>
         <section className="bg-white border border-gray-200 rounded-xl p-6 mb-2">
           <ClientBriefInput
             postId={post.id}
